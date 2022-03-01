@@ -1,6 +1,7 @@
 package formatconverter
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -50,31 +51,40 @@ func (walker *DirWalker) walk(path string, info fs.FileInfo, err error) error {
 
 	decoderFactory, err := NewDecoderFactoryByFilename(path)
 	if err != nil {
-		walker.printError(relativePath, err)
+		walker.printError(relativePath, fmt.Errorf("create decoder: %v", err))
 		return nil
 	}
 
 	converter, err := NewConverter(walker.encoderFactory, decoderFactory)
 	if err != nil {
-		walker.printError(relativePath, err)
+		walker.printError(relativePath, fmt.Errorf("create converter: %v", err))
 		return nil
 	}
 
 	src, err := os.Open(path)
 	if err != nil {
-		walker.printError(relativePath, err)
+		walker.printError(relativePath, fmt.Errorf("open source file: %v", err))
 		return nil
 	}
 
-	dst, err := os.Create(filepath.Join(walker.dstPath, walker.dstFilename(path)))
+	dirName, fileName := filepath.Split(relativePath)
+	dstDirName := filepath.Join(walker.dstPath, dirName)
+
+	err = os.MkdirAll(dstDirName, os.ModePerm)
 	if err != nil {
-		walker.printError(relativePath, err)
+		walker.printError(relativePath, fmt.Errorf("make destination dir: %v", err))
+		return nil
+	}
+
+	dst, err := os.Create(filepath.Join(dstDirName, walker.dstFilename(fileName)))
+	if err != nil {
+		walker.printError(relativePath, fmt.Errorf("create destination file: %v", err))
 		return nil
 	}
 
 	err = converter.Convert(dst, src)
 	if err != nil {
-		walker.printError(relativePath, err)
+		walker.printError(relativePath, fmt.Errorf("convert: %v", err))
 		return nil
 	}
 

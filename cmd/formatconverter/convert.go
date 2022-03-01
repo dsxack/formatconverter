@@ -37,13 +37,6 @@ var convertCmd = &cobra.Command{
 		}
 
 		if srcStat.IsDir() {
-			if os.IsNotExist(dstErr) {
-				err = os.MkdirAll(dstPath, os.ModePerm)
-				if err != nil {
-					return fmt.Errorf("make destination dir: %v", err)
-				}
-			}
-
 			if dstFormat == nil || *dstFormat == "" {
 				return fmt.Errorf("dst-format flag is required when source is directory")
 			}
