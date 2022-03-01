@@ -52,7 +52,7 @@ func TestFormatConverter_Convert(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			converter, err := New(tt.encoderFactory, tt.decoderFactory)
+			converter, err := NewConverter(tt.encoderFactory, tt.decoderFactory)
 			require.NoError(t, err)
 
 			dst := &bytes.Buffer{}
@@ -90,7 +90,7 @@ func TestNew(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := New(tt.encoderFactory, tt.decoderFactory)
+			_, err := NewConverter(tt.encoderFactory, tt.decoderFactory)
 			if tt.wantErr {
 				require.Error(t, err)
 				return

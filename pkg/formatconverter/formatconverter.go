@@ -10,7 +10,7 @@ type FormatConverter struct {
 	decoderFactory DecoderFactory
 }
 
-func New(encoderFactory EncoderFactory, decoderFactory DecoderFactory) (*FormatConverter, error) {
+func NewConverter(encoderFactory EncoderFactory, decoderFactory DecoderFactory) (*FormatConverter, error) {
 	if encoderFactory.FormatName() == decoderFactory.FormatName() {
 		return nil, fmt.Errorf("source and destination have same formats: %v", decoderFactory.FormatName())
 	}
