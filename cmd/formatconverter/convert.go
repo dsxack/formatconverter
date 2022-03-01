@@ -19,20 +19,20 @@ var convertCmd = &cobra.Command{
 
 		src, err := os.Open(srcPath)
 		if err != nil {
-			return fmt.Errorf("error opening source file: %s", srcPath)
+			return fmt.Errorf("opening source file: %s", srcPath)
 		}
 		dst, err := os.Create(dstPath)
 		if err != nil {
-			return fmt.Errorf("error create destination file: %s", dstPath)
+			return fmt.Errorf("create destination file: %s", dstPath)
 		}
 
 		decoderFactory, err := formatconverter.NewDecoderFactoryByFilename(srcPath)
 		if err != nil {
-			return err
+			return fmt.Errorf("create decoder factory: %v", err)
 		}
 		encoderFactory, err := formatconverter.NewEncoderFactoryByFilename(dstPath)
 		if err != nil {
-			return err
+			return fmt.Errorf("create encoder factory: %v", err)
 		}
 
 		converter, err := formatconverter.New(encoderFactory, decoderFactory)
@@ -42,7 +42,7 @@ var convertCmd = &cobra.Command{
 
 		err = converter.Convert(dst, src)
 		if err != nil {
-			return fmt.Errorf("error convert %s into %s: %v", srcPath, dstPath, err)
+			return fmt.Errorf("convert %s into %s: %v", srcPath, dstPath, err)
 		}
 
 		return nil
