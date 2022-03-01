@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/dsxack/formatconverter/pkg/formatconverter"
 	"github.com/spf13/cobra"
 	"os"
 )
 
 var convertCmd = &cobra.Command{
 	Use:   "convert <source> <destination>",
-	Short: "convert your source JSON file into destination YAML file",
+	Short: "convert your source file into destination file",
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var (
@@ -24,7 +25,18 @@ var convertCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("error create destination file: %s", dstPath)
 		}
-		err = defaultConverter.Convert(dst, src)
+
+		decoderFactory, err := formatconverter.NewDecoderFactoryByFilename(srcPath)
+		if err != nil {
+			return err
+		}
+		encoderFactory, err := formatconverter.NewEncoderFactoryByFilename(dstPath)
+		if err != nil {
+			return err
+		}
+
+		converter := formatconverter.New(encoderFactory, decoderFactory)
+		err = converter.Convert(dst, src)
 		if err != nil {
 			return fmt.Errorf("error convert %s into %s: %v", srcPath, dstPath, err)
 		}

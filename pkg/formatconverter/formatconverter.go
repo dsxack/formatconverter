@@ -1,31 +1,35 @@
 package formatconverter
 
 import (
-	"encoding/json"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"io"
 )
 
-type FormatConverter struct{}
+type FormatConverter struct {
+	encoderFactory EncoderFactory
+	decoderFactory DecoderFactory
+}
 
-func New() *FormatConverter {
-	return &FormatConverter{}
+func New(encoderFactory EncoderFactory, decoderFactory DecoderFactory) *FormatConverter {
+	return &FormatConverter{
+		encoderFactory: encoderFactory,
+		decoderFactory: decoderFactory,
+	}
 }
 
 func (converter FormatConverter) Convert(dst io.Writer, src io.Reader) error {
-	decoder := json.NewDecoder(src)
+	decoder := converter.decoderFactory.NewDecoder(src)
 
 	var value interface{}
 
 	err := decoder.Decode(&value)
 	if err != nil {
-		return fmt.Errorf("error decoding json: %v", err)
+		return fmt.Errorf("decode: %v", err)
 	}
-	encoder := yaml.NewEncoder(dst)
+	encoder := converter.encoderFactory.NewEncoder(dst)
 	err = encoder.Encode(value)
 	if err != nil {
-		return fmt.Errorf("errror encoding yaml: %v", err)
+		return fmt.Errorf("encode: %v", err)
 	}
 
 	return nil
