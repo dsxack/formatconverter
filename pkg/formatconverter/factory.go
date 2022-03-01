@@ -16,10 +16,12 @@ type Decoder interface {
 
 type EncoderFactory interface {
 	NewEncoder(io.Writer) Encoder
+	FormatName() string
 }
 
 type DecoderFactory interface {
 	NewDecoder(io.Reader) Decoder
+	FormatName() string
 }
 
 type EncoderDecoderFactory interface {

@@ -17,3 +17,5 @@ func (j yamlEncoderDecoderFactory) NewDecoder(reader io.Reader) Decoder {
 func (j yamlEncoderDecoderFactory) NewEncoder(writer io.Writer) Encoder {
 	return yaml.NewEncoder(writer)
 }
+
+func (j yamlEncoderDecoderFactory) FormatName() string { return "yaml" }

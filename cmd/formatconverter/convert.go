@@ -35,7 +35,11 @@ var convertCmd = &cobra.Command{
 			return err
 		}
 
-		converter := formatconverter.New(encoderFactory, decoderFactory)
+		converter, err := formatconverter.New(encoderFactory, decoderFactory)
+		if err != nil {
+			return fmt.Errorf("create converter: %v", err)
+		}
+
 		err = converter.Convert(dst, src)
 		if err != nil {
 			return fmt.Errorf("error convert %s into %s: %v", srcPath, dstPath, err)

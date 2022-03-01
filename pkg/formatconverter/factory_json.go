@@ -17,3 +17,5 @@ func (j jsonEncoderDecoderFactory) NewDecoder(reader io.Reader) Decoder {
 func (j jsonEncoderDecoderFactory) NewEncoder(writer io.Writer) Encoder {
 	return json.NewEncoder(writer)
 }
+
+func (j jsonEncoderDecoderFactory) FormatName() string { return "json" }
