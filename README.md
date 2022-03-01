@@ -10,4 +10,5 @@ go get github.com/dsxack/formatconverter/cmd/formatconverter@latest
 
 ```sh
 format-converter convert ./source.json ./destination.yaml
+format-converter convert ./source.yaml ./destination.json
 ```

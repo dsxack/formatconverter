@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/dsxack/formatconverter/pkg/formatconverter"
 	"github.com/spf13/cobra"
 	"io"
 )
@@ -22,5 +23,5 @@ type converter interface {
 }
 
 func initialize() {
-	defaultConverter = fakeConverter{}
+	defaultConverter = formatconverter.New()
 }
