@@ -36,7 +36,7 @@ func Serve(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	converter, err := NewConverter(encoderFactory, decoderFactory)
+	converter, err := NewFormatConverter(encoderFactory, decoderFactory)
 	if err != nil {
 		http.Error(writer, fmt.Sprintf("error when creating converter: %v", err), http.StatusBadRequest)
 		return

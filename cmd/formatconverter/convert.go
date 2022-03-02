@@ -84,7 +84,7 @@ var convertCmd = &cobra.Command{
 			}
 		}
 
-		converter, err := formatconverter.NewConverter(encoderFactory, decoderFactory)
+		converter, err := formatconverter.NewFormatConverter(encoderFactory, decoderFactory)
 		if err != nil {
 			return fmt.Errorf("create converter: %v", err)
 		}

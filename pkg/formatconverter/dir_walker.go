@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+// DirWalker walks through source directory and converts all files into destination directory
+// with saving structure of source directory.
 type DirWalker struct {
 	srcPath        string
 	dstPath        string
@@ -16,6 +18,11 @@ type DirWalker struct {
 	dstFormat      string
 }
 
+// NewDirWalker creates a new DirWalker.
+// srcPath is path to source directory.
+// dstPath is path to destination directory
+// dstFormat is format for encoder.
+// logger is any implementation of Logger for logging success and fail converting messages.
 func NewDirWalker(srcPath, dstPath, dstFormat string, logger Logger) (*DirWalker, error) {
 	encoderFactory, err := NewEncoderFactoryByFormat(dstFormat)
 	if err != nil {
@@ -55,7 +62,7 @@ func (walker *DirWalker) walk(path string, info fs.FileInfo, err error) error {
 		return nil
 	}
 
-	converter, err := NewConverter(walker.encoderFactory, decoderFactory)
+	converter, err := NewFormatConverter(walker.encoderFactory, decoderFactory)
 	if err != nil {
 		walker.printError(relativePath, fmt.Errorf("create converter: %v", err))
 		return nil
