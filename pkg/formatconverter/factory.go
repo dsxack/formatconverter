@@ -30,10 +30,15 @@ type EncoderDecoderFactory interface {
 	DecoderFactory
 }
 
-var encodersMap = map[string]EncoderDecoderFactory{
+var encodersByFormat = map[string]EncoderDecoderFactory{
 	"json": jsonEncoderDecoderFactory{},
 	"yaml": yamlEncoderDecoderFactory{},
 	"yml":  yamlEncoderDecoderFactory{},
+}
+
+var encodersByMimeType = map[string]EncoderDecoderFactory{
+	"application/json": jsonEncoderDecoderFactory{},
+	"application/yaml": yamlEncoderDecoderFactory{},
 }
 
 func NewEncoderFactoryByFilename(filename string) (EncoderFactory, error) {
@@ -43,7 +48,7 @@ func NewEncoderFactoryByFilename(filename string) (EncoderFactory, error) {
 }
 
 func NewEncoderFactoryByFormat(format string) (EncoderFactory, error) {
-	encoder, ok := encodersMap[format]
+	encoder, ok := encodersByFormat[format]
 	if !ok {
 		return nil, fmt.Errorf("can not encode files with format: %v", format)
 	}
@@ -57,9 +62,17 @@ func NewDecoderFactoryByFilename(filename string) (DecoderFactory, error) {
 }
 
 func NewDecoderFactoryByFormat(format string) (DecoderFactory, error) {
-	decoder, ok := encodersMap[format]
+	decoder, ok := encodersByFormat[format]
 	if !ok {
 		return nil, fmt.Errorf("can not decode files with format: %v", format)
 	}
 	return decoder, nil
+}
+
+func NewDecoderFactoryByMimeType(mtype string) (DecoderFactory, error) {
+	encoder, ok := encodersByMimeType[mtype]
+	if !ok {
+		return nil, fmt.Errorf("can not decode files with mimetype: %v", mtype)
+	}
+	return encoder, nil
 }
