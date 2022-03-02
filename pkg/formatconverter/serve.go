@@ -25,7 +25,7 @@ func Serve(writer http.ResponseWriter, request *http.Request) {
 
 	dstFormat := request.URL.Query().Get("dstFormat")
 	if dstFormat == "" {
-		http.Error(writer, fmt.Sprintf("dstFormat query parameter is required"), http.StatusBadRequest)
+		http.Error(writer, "dstFormat query parameter is required", http.StatusBadRequest)
 		return
 	}
 	dstFormat = strings.ToLower(dstFormat)
