@@ -1,6 +1,6 @@
 module github.com/dsxack/formatconverter
 
-go 1.18
+go 1.16
 
 require (
 	github.com/gabriel-vasile/mimetype v1.4.0
